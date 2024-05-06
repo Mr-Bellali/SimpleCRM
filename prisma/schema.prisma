@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model clients {
+  ID_client        Int     @id @default(autoincrement())
+  Prenom           String? @db.VarChar(100)
+  Nom              String? @db.VarChar(100)
+  Adresse          String? @db.Text
+  Ville            String? @db.VarChar(100)
+  Numero_telephone String? @db.VarChar(12)
+  Email            String? @db.VarChar(100)
+  ID_entreprise    Int?
+
+  @@index([ID_entreprise], map: "ID_entreprise")
+}
+
+model elements_facture {
+  ID_element_facture Int    @id @default(autoincrement())
+  Quantite           Int?
+  Prix_unitaire      Float? @db.Float
+  Prix_total         Float? @db.Float
+  ID_facture         Int?
+  ID_produit         Int?
+
+  @@index([ID_facture], map: "ID_facture")
+  @@index([ID_produit], map: "ID_produit")
+}
+
+model entreprises {
+  ID_entreprise                 Int       @id @default(autoincrement())
+  Nom_entreprise                String    @db.VarChar(100)
+  Adresse_siege_social          String    @db.Text
+  Date_creation                 DateTime?   @db.Date
+  Numero_identification_fiscale String    @unique(map: "Numero_identification_fiscale") @db.VarChar(100)
+  Capital                       Float?    @db.Float
+  Nombre_employes               Int
+  Ville                         String?   @db.VarChar(100)
+  Personne_responsable          String?   @db.VarChar(100)
+  Numero_telephone_entreprise   String?   @db.VarChar(12)
+  Email_entreprise              String?   @db.VarChar(100)
+}
+
+
+
+model factures {
+  ID_facture    Int       @id @default(autoincrement())
+  Date_facture  DateTime? @db.Date
+  Echeance      Int?
+  Total_HT      Float?    @db.Float
+  TVA           Float?    @db.Float
+  Total_TTC     Float?    @db.Float
+  ID_entreprise Int?
+
+  @@index([ID_entreprise], map: "ID_entreprise")
+}
+
+
+model Boncommandes {
+  ID_boncommande    Int      @id @default(autoincrement())
+  ID_client         Int
+  ID_element_facture Int
+  date_boncommande  DateTime?
+
+  @@index([ID_client], map: "ID_client")
+  @@index([ID_element_facture], map: "ID_element_facture")
+}
+
+model produits {
+  ID_produit  Int     @id @default(autoincrement())
+  Nom_produit String  @db.VarChar(100)
+  Prix_achat  Float?  @db.Float
+  Prix_vente  Float?  @db.Float
+  Taux_marge  String? @db.VarChar(100)
+  Dimensions  Float?  @db.Float
+  Taille      String? @db.VarChar(100)
+}
+
+model stock {
+  Quantity Int
+  ID_entreprise Int
+  ID_produit    Int
+
+  @@id([ID_entreprise, ID_produit])
+  @@index([ID_produit], map: "ID_produit")
+}
+
+
