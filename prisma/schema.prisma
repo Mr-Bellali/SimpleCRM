@@ -30,7 +30,9 @@ model elements_facture {
 
   @@index([ID_facture], map: "ID_facture")
   @@index([ID_produit], map: "ID_produit")
+  facture            factures? @relation(fields: [ID_facture], references: [ID_facture])
 }
+
 
 model entreprises {
   ID_entreprise                 Int       @id @default(autoincrement())
@@ -56,9 +58,13 @@ model factures {
   TVA           Float?    @db.Float
   Total_TTC     Float?    @db.Float
   ID_entreprise Int?
+  ID_client     Int?
 
   @@index([ID_entreprise], map: "ID_entreprise")
+  @@index([ID_client], map: "ID_client")
+  elements      elements_facture[]
 }
+
 
 
 model Boncommandes {
@@ -66,10 +72,24 @@ model Boncommandes {
   ID_client         Int
   ID_element_facture Int
   date_boncommande  DateTime?
+  elements          ElementInBoncommande[]
 
   @@index([ID_client], map: "ID_client")
   @@index([ID_element_facture], map: "ID_element_facture")
 }
+
+
+model ElementInBoncommande {
+  ID_element_in_boncommande Int @id @default(autoincrement())
+  boncommandeID             Int
+  produitID                  Int
+  quantite                   Int
+  boncommande                Boncommandes @relation(fields: [boncommandeID], references: [ID_boncommande])
+
+  @@index([boncommandeID], map: "boncommandeID")
+  @@index([produitID], map: "produitID")
+}
+
 
 model produits {
   ID_produit  Int     @id @default(autoincrement())

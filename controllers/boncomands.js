@@ -1,10 +1,9 @@
-// controllers/boncommandes.js
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const getAllBonCommandes = async (req, res) => {
     try {
-        const allBonCommandes = await prisma.Boncommandes.findMany();
+        const allBonCommandes = await prisma.boncommandes.findMany();
         res.send(allBonCommandes);
     } catch (error) {
         res.send(error);
@@ -14,7 +13,7 @@ export const getAllBonCommandes = async (req, res) => {
 export const getBonCommande = async (req, res) => {
     const id = req.params.id;
     try {
-        const bonCommande = await prisma.Boncommandes.findUnique({
+        const bonCommande = await prisma.boncommandes.findUnique({
             where : {
                 ID_boncommande: parseInt(id)
             }
@@ -27,9 +26,18 @@ export const getBonCommande = async (req, res) => {
 
 export const createBonCommande = async (req, res) => {
     try {
-        const createdBonCommande = await prisma.Boncommandes.create({
-            data: req.body
-        })
+        const { elements, ...bonCommandeData } = req.body; 
+        const createdBonCommande = await prisma.boncommandes.create({
+            data: {
+                ...bonCommandeData, 
+                elements: {
+                    create: elements
+                }
+            },
+            include: {
+                elements: true
+            }
+        });
         res.send(createdBonCommande);
     } catch (error) {
         res.send(error);
@@ -39,7 +47,7 @@ export const createBonCommande = async (req, res) => {
 export const updateBonCommande = async (req, res) => {
     const id = req.params.id;
     try {
-        const updatedBonCommande = await prisma.Boncommandes.update({
+        const updatedBonCommande = await prisma.boncommandes.update({
             where: {
                 ID_boncommande: parseInt(id)
             },

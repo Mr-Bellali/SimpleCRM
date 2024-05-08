@@ -27,7 +27,16 @@ export const getFacture = async (req, res) => {
 export const createFacture = async (req, res) => {
     try {
         const createdFacture = await prisma.factures.create({
-            data: req.body
+            data: {
+                Date_facture: req.body.Date_facture,
+                Echeance: req.body.Echeance,
+                Total_HT: req.body.Total_HT,
+                TVA: req.body.TVA,
+                Total_TTC: req.body.Total_TTC,
+                ID_entreprise: req.body.ID_entreprise,
+                ID_client: req.body.ID_client,
+                elements: req.body.elements // Assuming req.body.elements contains the array of elements_facture
+            }
         })
         res.send(createdFacture);
     } catch (error) {
@@ -42,7 +51,16 @@ export const updateFacture = async (req, res) => {
             where: {
                 ID_facture: parseInt(id)
             },
-            data: req.body
+            data: {
+                Date_facture: req.body.Date_facture,
+                Echeance: req.body.Echeance,
+                Total_HT: req.body.Total_HT,
+                TVA: req.body.TVA,
+                Total_TTC: req.body.Total_TTC,
+                ID_entreprise: req.body.ID_entreprise,
+                ID_client: req.body.ID_client,
+                elements: req.body.elements // Assuming req.body.elements contains the array of elements_facture
+            }
         })
         res.send(updatedFacture);
     } catch (error) {

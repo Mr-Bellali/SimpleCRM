@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllBonCommandes, getBonCommande, createBonCommande, updateBonCommande, deleteBonCommande } from '../controllers/boncommandes.js';
+import { getAllBonCommandes, getBonCommande, createBonCommande, updateBonCommande, deleteBonCommande } from '../controllers/boncomands.js';
 
 const router = express.Router(); 
 
