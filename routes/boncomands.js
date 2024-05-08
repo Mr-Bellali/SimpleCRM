@@ -1,10 +1,12 @@
-import express, { Router } from 'express';
-import { createBondcomand, getAllboncomands } from '../controllers/boncomands.js';
+import express from 'express';
+import { getAllBonCommandes, getBonCommande, createBonCommande, updateBonCommande, deleteBonCommande } from '../controllers/boncommandes.js';
 
 const router = express.Router(); 
 
-router.get("/", getAllboncomands);
-router.post('/', createBondcomand);
-
+router.get("/", getAllBonCommandes);
+router.get("/:id", getBonCommande);
+router.post("/", createBonCommande);
+router.put("/:id", updateBonCommande);
+router.delete("/:id", deleteBonCommande);
 
 export default router;
